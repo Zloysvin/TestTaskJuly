@@ -6,6 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
+    public bool _automatic;
+
     private Rigidbody2D _rb;
     private Camera _camera;
     private IWeapon _currentWeapon;
@@ -27,9 +29,14 @@ public class PlayerController : MonoBehaviour
 
         _moveDirection.x = Input.GetAxis("Horizontal");
         _moveDirection.y = Input.GetAxis("Vertical");
-
-        if (Input.GetMouseButton(0))
-            _currentWeapon.Shoot();
+        if (!_automatic)
+        {
+            if (Input.GetMouseButtonDown(0))
+                _currentWeapon.Shoot();
+        }
+        else
+            if (Input.GetMouseButton(0))
+                _currentWeapon.Shoot();
 
         if (Input.GetMouseButton(1))
             _currentWeapon.Reload();
