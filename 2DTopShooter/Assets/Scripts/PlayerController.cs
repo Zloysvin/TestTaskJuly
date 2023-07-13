@@ -14,10 +14,13 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 _moveDirection;
     private int _selectedWeaponIndex;
+    private float _fadeInTime;
+    private float _fadeOutTime;
 
     [SerializeField] private float _speed;
     [SerializeField] private Image _ammoType;
     [SerializeField] private TMP_Text _ammoText;
+    [SerializeField] private TMP_Text _reload;
 
     public GameObject[] Weapons;
 
@@ -30,9 +33,15 @@ public class PlayerController : MonoBehaviour
         foreach (var weapon in Weapons)
         {
             weapon.GetComponent<IWeapon>().OnShoot += PlayerController_OnShoot;
+            weapon.GetComponent<IWeapon>().OnReload += PlayerController_OnReload;
         }
 
         _ammoText.text = $"{_currentWeapon.CurrentAmmoInClip}/{_currentWeapon.CurrentAmmo - _currentWeapon.CurrentAmmoInClip}";
+    }
+
+    private void PlayerController_OnReload(object sender, System.EventArgs e)
+    {
+        StartCoroutine(ReloadAnimation(_currentWeapon.ReloadTime));
     }
 
     private void PlayerController_OnShoot(object sender, ShootingEventArgs e)
@@ -59,7 +68,9 @@ public class PlayerController : MonoBehaviour
         }
 
         if (Input.GetMouseButton(1))
+        {
             _currentWeapon.Reload();
+        }
 
         if (Input.GetKeyDown(KeyCode.Q))
             SwapWeapons(_selectedWeaponIndex - 1);
@@ -109,5 +120,31 @@ public class PlayerController : MonoBehaviour
         _selectedWeaponIndex = newIndex;
         Weapons[_selectedWeaponIndex].SetActive(true);
         EquipWeapon();
+
+        _ammoText.text = $"{_currentWeapon.CurrentAmmoInClip}/{_currentWeapon.CurrentAmmo - _currentWeapon.CurrentAmmoInClip}";
+    }
+
+    private IEnumerator ReloadAnimation(float reloadTime)
+    {
+        _fadeInTime = 0.2f;
+        _fadeOutTime = 0.2f;
+
+        float alpha = 0.0f;
+        while (alpha < 1.0f)
+        {
+            alpha += Time.deltaTime / _fadeInTime;
+            _reload.color = new Color(1f, 0f, 0.9848051f, alpha);
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(reloadTime);
+
+        alpha = 1.0f;
+        while (alpha > 0.0f)
+        {
+            alpha -= Time.deltaTime / _fadeOutTime;
+            _reload.color = new Color(1f, 0f, 0.9848051f, alpha);
+            yield return null;
+        }
     }
 }

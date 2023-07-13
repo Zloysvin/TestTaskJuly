@@ -10,6 +10,7 @@ public interface IWeapon
     Transform GunPoint { set; }
     Projectile Projectile { set; }
     public event EventHandler<ShootingEventArgs> OnShoot;
+    public event EventHandler<EventArgs> OnReload; 
 
     public bool IsAutomatic { get; set; }
     public int AmmoClipSize { get; set; }
@@ -18,7 +19,7 @@ public interface IWeapon
     public int MaxAmmo { get; set; }
     public Sprite Ammo { get; set; }
     public float ShootTime { set; }
-    public float ReloadTime { set; }
+    public float ReloadTime { get; set; }
     public float SpreadMultiplier { get; set; }
 
     public bool Shooting { get; set; }

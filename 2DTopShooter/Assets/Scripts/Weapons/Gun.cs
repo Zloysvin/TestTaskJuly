@@ -10,6 +10,7 @@ public class Gun : MonoBehaviour, IWeapon
     [field: SerializeField] public Transform GunPoint { get; set; }
     [field: SerializeField] public Projectile Projectile { get; set; }
     public event EventHandler<ShootingEventArgs> OnShoot;
+    public event EventHandler<EventArgs> OnReload;
     [field: SerializeField] public bool IsAutomatic { get; set; }
     [field: SerializeField] public int AmmoClipSize { get; set; }
     [field: SerializeField] public int CurrentAmmoInClip { get; set; }
@@ -50,12 +51,14 @@ public class Gun : MonoBehaviour, IWeapon
         }
         else
         {
+            OnReload(this, EventArgs.Empty);
             Reload();
         }
     }
 
     public IEnumerator ReloadDelay()
     {
+        OnReload(this, EventArgs.Empty);
         Reloading = true;
         Debug.Log("Reloading...");
         yield return new WaitForSeconds(ReloadTime);
