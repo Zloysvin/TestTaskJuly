@@ -7,7 +7,7 @@ using UnityEngine;
 public interface IWeapon
 {
     string Name { get; set; }
-    Transform GunPoint { set; }
+    Transform GunPoint { get; set; }
     Projectile Projectile { set; }
     public event EventHandler<ShootingEventArgs> OnShoot;
     public event EventHandler<EventArgs> OnReload; 
