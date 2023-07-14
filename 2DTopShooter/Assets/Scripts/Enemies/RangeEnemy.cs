@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,8 @@ public class RangeEnemy : MonoBehaviour, IDamagable
 {
     [field: SerializeField] public float HP { get; set; }
     [field: SerializeField] public float HPMax { get; set; }
+    public event EventHandler<DamageTakenEventArgs> OnDamageTaken;
+    public event EventHandler<DeathEventArgs> OnDeath;
 
     private Transform _target;
     private NavMeshAgent _agent;
@@ -19,10 +22,17 @@ public class RangeEnemy : MonoBehaviour, IDamagable
         _agent = GetComponent<NavMeshAgent>();
         _agent.updateRotation = false;
         _agent.updateUpAxis = false;
+
         _target = GameObject.FindWithTag("Player").transform;
+        _target.GetComponent<PlayerController>().OnDeath += Player_OnDeath;
 
         _weapon = GetComponentInChildren<IWeapon>();
         _weaponGunPoint = _weapon.GunPoint;
+    }
+
+    private void Player_OnDeath(object sender, DeathEventArgs e)
+    {
+        _target = transform;
     }
 
     void Update()
@@ -52,12 +62,15 @@ public class RangeEnemy : MonoBehaviour, IDamagable
     {
         //transform.rotation = Quaternion.LookRotation(new Vector3(_agent.velocity.x, _agent.velocity.y, 0f));
     }
-    public void ReceiveDamage(float damage)
+    public void ReceiveDamage(float damage, bool isShootingPlayer)
     {
         HP -= damage;
         Debug.Log(HP);
 
         if (HP <= 0)
+        {
+            OnDeath(this, new DeathEventArgs(isShootingPlayer));
             Destroy(gameObject);
+        }
     }
 }

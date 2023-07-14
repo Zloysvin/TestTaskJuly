@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDamagable
 {
     private Rigidbody2D _rb;
     private Camera _camera;
@@ -19,10 +20,16 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float _speed;
     [SerializeField] private Image _ammoType;
+    [SerializeField] private Image _blood;
     [SerializeField] private TMP_Text _ammoText;
     [SerializeField] private TMP_Text _reload;
 
     public GameObject[] Weapons;
+    [field: SerializeField] public float HP { get; set; }
+    [field: SerializeField] public float HPMax { get; set; }
+    public event EventHandler<DamageTakenEventArgs> OnDamageTaken;
+
+    public event EventHandler<DeathEventArgs> OnDeath;
 
     void Awake()
     {
@@ -145,6 +152,21 @@ public class PlayerController : MonoBehaviour
             alpha -= Time.deltaTime / _fadeOutTime;
             _reload.color = new Color(1f, 0f, 0.9848051f, alpha);
             yield return null;
+        }
+    }
+
+    public void ReceiveDamage(float damage, bool IsShootingPlayer)
+    {
+        HP -= damage;
+        Debug.Log(HP);
+        float alpha = (HPMax - HP) / HPMax;
+        _blood.color = new Color(1, 0, 0, alpha);
+        OnDamageTaken(this, new DamageTakenEventArgs(HP, HPMax, damage));
+
+        if (HP <= 0)
+        {
+            OnDeath(this, new DeathEventArgs(false));
+            Destroy(gameObject);
         }
     }
 }

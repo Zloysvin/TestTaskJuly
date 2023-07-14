@@ -9,6 +9,7 @@ public class Projectile : MonoBehaviour
 
     [SerializeField] private float _lifeTime;
     [SerializeField] private float _speed;
+    [SerializeField] private bool _isPlayerBullet;
 
     private Rigidbody2D _rigidbody;
 
@@ -29,7 +30,7 @@ public class Projectile : MonoBehaviour
         IDamagable damageModel;
         if (collision.gameObject.TryGetComponent(out damageModel))
         {
-            damageModel.ReceiveDamage(Damage);
+            damageModel.ReceiveDamage(Damage, _isPlayerBullet);
         }
         Destroy(gameObject);
     }

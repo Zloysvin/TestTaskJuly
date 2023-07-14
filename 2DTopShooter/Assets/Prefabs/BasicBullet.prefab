@@ -150,6 +150,7 @@ MonoBehaviour:
   Damage: 10
   _lifeTime: 10
   _speed: 3000
+  _isPlayerBullet: 1
 --- !u!96 &1013377010374214851
 TrailRenderer:
   serializedVersion: 2

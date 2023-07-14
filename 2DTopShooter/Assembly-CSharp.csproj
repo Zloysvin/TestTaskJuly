@@ -69,6 +69,11 @@
     <Compile Include="Assets\Scripts\Enemies\RangeEnemy.cs" />
     <Compile Include="Assets\Scripts\Weapons\EnemyGun.cs" />
     <Compile Include="Assets\Scripts\EnemySpawner.cs" />
+    <Compile Include="Assets\Scripts\Events\DeathEventArgs.cs" />
+    <Compile Include="Assets\Scripts\UI\ReloadTextAnimation.cs" />
+    <Compile Include="Assets\Scripts\Events\DamageTakenEventArgs.cs" />
+    <Compile Include="Assets\Scripts\UI\GameOverUI.cs" />
+    <Compile Include="Assets\Scripts\Crosshair.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

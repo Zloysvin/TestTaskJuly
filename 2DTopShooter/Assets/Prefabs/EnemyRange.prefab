@@ -191,8 +191,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780c37639c1d5e64eb3ece2de9cda0e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <HP>k__BackingField: 100
-  <HPMax>k__BackingField: 100
+  <HP>k__BackingField: 50
+  <HPMax>k__BackingField: 50
 --- !u!1 &6196552240767020562
 GameObject:
   m_ObjectHideFlags: 0

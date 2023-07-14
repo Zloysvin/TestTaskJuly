@@ -15,6 +15,12 @@ public class CameraFollow : MonoBehaviour
     void Awake()
     {
         _camera = GetComponent<Camera>();
+        Target.GetComponent<PlayerController>().OnDeath += Player_OnDeath;
+    }
+
+    private void Player_OnDeath(object sender, DeathEventArgs e)
+    {
+        Target = transform;
     }
 
     void Update()
